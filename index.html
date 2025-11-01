@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>NDVI Season Decoder — 2024</title>
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<style>
+  :root {
+    --bg:#0b0d10; --fg:#e8e8e8; --muted:#9aa3ad; --accent:#36c270;
+    --card:#14181e; --card2:#1b2129; --ring:#2a323c;
+  }
+  html,body { margin:0; background:var(--bg); color:var(--fg); font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif; }
+  .page { max-width:1200px; margin:24px auto; padding:0 16px; }
+  h1 { font-weight:700; font-size:1.6rem; margin:0 0 6px; }
+  p.top-note { color:var(--muted); margin:0 0 16px; }
+  .viewer { background:var(--card); border:1px solid var(--ring); border-radius:16px; padding:12px; }
+  .stage { position:relative; width:100%; aspect-ratio: 2200/1300; background: #000; border-radius:12px; overflow:hidden; }
+  .stage img.layer { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter: saturate(1.05) contrast(1.04); }
+  .hud { display:flex; gap:12px; align-items:center; padding:10px 4px 0; flex-wrap:wrap; }
+  .btn { background:var(--card2); border:1px solid var(--ring); color:var(--fg); padding:8px 12px; border-radius:10px; cursor:pointer; }
+  .btn:hover { border-color:#3b4653; }
+  .slider-wrap { display:flex; align-items:center; gap:10px; flex:1; min-width:240px; }
+  input[type=range] { width:100%; accent-color: var(--accent); }
+  .month-label { min-width:82px; font-variant-numeric: tabular-nums; }
+  .legend { display:flex; align-items:center; gap:12px; padding:10px 4px 0; color:var(--muted); font-size:0.95rem; }
+  .grad { height:12px; width:260px; border-radius:6px; border:1px solid var(--ring);
+           background: linear-gradient(90deg,#654321,#8b9b61,#6bbf63,#2aa84a,#127a2a,#0a4d1a); }
+  .thumbs { margin-top:14px; display:grid; grid-template-columns:repeat(6,1fr); gap:8px; }
+  .thumb { position:relative; background:var(--card2); border:1px solid var(--ring); border-radius:10px; overflow:hidden; cursor:pointer; }
+  .thumb img { width:100%; height:100%; object-fit:cover; display:block; filter: saturate(1.05) contrast(1.04); }
+  .thumb span { position:absolute; left:8px; top:6px; background:rgba(0,0,0,.55); color:#fff;
+                padding:2px 6px; border-radius:6px; font-size:12px; }
+  .caption { margin-top:8px; color:var(--muted); line-height:1.35; }
+  @media (max-width:760px) {.thumbs{grid-template-columns:repeat(3,1fr);} }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>NDVI — Vegetation Greenness Across U.S. (2024)</h1>
+  <p class="top-note">Data: NASA MODIS via GIBS. Use the slider or play to watch seasonal green-up and senescence.</p>
+
+  <div class="viewer">
+    <div class="stage" id="stage"></div>
+
+    <div class="hud">
+      <button class="btn" id="play">▶ Play</button>
+      <div class="slider-wrap">
+        <span>Month</span>
+        <input id="slider" type="range" min="1" max="12" step="1" value="1">
+        <span class="month-label" id="mlab">Jan 15</span>
+      </div>
+      <div style="color:var(--muted)">Layer: <b>MODIS Terra NDVI (Monthly)</b></div>
+    </div>
+
+    <div class="legend">
+      <div>NDVI</div>
+      <div class="grad" title="Approximate NDVI palette (brown → lush green)"></div>
+      <div>low</div><div style="margin-left:auto">high</div>
+    </div>
+
+    <div class="caption" id="caption"></div>
+
+    <div class="thumbs" id="thumbs"></div>
+  </div>
+</div>
+
+<script>
+const months = [
+  {m:1,  label:"Jan 15"},
+  {m:2,  label:"Feb 15"},
+  {m:3,  label:"Mar 15"},
+  {m:4,  label:"Apr 15"},
+  {m:5,  label:"May 15"},
+  {m:6,  label:"Jun 15"},
+  {m:7,  label:"Jul 15"},
+  {m:8,  label:"Aug 15"},
+  {m:9,  label:"Sep 15"},
+  {m:10, label:"Oct 15"},
+  {m:11, label:"Nov 15"},
+  {m:12, label:"Dec 15"},
+];
+
+// use .png 
+const imgPath = m => `assets/ndvi/ndvi_2024-${String(m).padStart(2,'0')}-15.png`;
+
+const stage = d3.select("#stage");
+const slider = d3.select("#slider");
+const mlab = d3.select("#mlab");
+const cap  = d3.select("#caption");
+const playBtn = d3.select("#play");
+
+let current = 1;
+let playing = false;
+let timer = null;
+
+// preload images and create two cross-fade layers
+const preload = months.map(d => {
+  const im = new Image();
+  im.src = imgPath(d.m);
+  return im;
+});
+
+// two layers for fade (double buffer)
+const layerA = stage.append("img").attr("class","layer").style("opacity",1);
+const layerB = stage.append("img").attr("class","layer").style("opacity",0);
+
+// thumbnails (overview → focus)
+const thumbs = d3.select("#thumbs")
+  .selectAll(".thumb").data(months).join("div").attr("class","thumb")
+  .on("click", (e,d) => setMonth(d.m, true));
+
+thumbs.append("img")
+  .attr("alt", d => `NDVI ${d.label}`)
+  .attr("src", d => imgPath(d.m));
+
+thumbs.append("span").text(d => d.label.split(" ")[0]);
+
+function setCaption(m) {
+  const msg = {
+    1: "Dormant or snow-covered regions are brown/gray; evergreen areas show modest green (Southeast).",
+    3: "Green-up begins in the Southeast and coastal California; interior West still muted.",
+    5: "Widespread green across the Midwest/Appalachians; arid Southwest stays lower.",
+    7: "Peak greenness across Corn Belt & Northeast; high elevations also green.",
+    9: "Senescence begins north/high-elevation; West dries while some East stays green.",
+    11:"Dormancy spreads; evergreens remain modestly green; some snow returns."
+  };
+  // nearest note
+  const keys = Object.keys(msg).map(k=>+k).sort((a,b)=>a-b);
+  let nearest = keys[0];
+  keys.forEach(k => { if (Math.abs(k-m) < Math.abs(nearest-m)) nearest = k; });
+  cap.text(msg[nearest] || "");
+}
+
+function setMonth(m, immediate=false) {
+  m = +m;
+  const nextSrc = imgPath(m);
+  mlab.text(months[m-1].label);
+  setCaption(m);
+
+  // cross-fade: show nextSrc on the hidden layer, then fade it in
+  const front = +layerA.style("opacity") > +layerB.style("opacity") ? layerB : layerA;
+  const back  = front === layerA ? layerB : layerA;
+
+  front.attr("src", nextSrc);
+
+  if (immediate) {
+    front.style("opacity", 1);
+    back.style("opacity", 0);
+  } else {
+    front.transition().duration(550).style("opacity", 1);
+    back .transition().duration(550).style("opacity", 0);
+  }
+
+  current = m;
+  slider.property("value", m);
+}
+
+slider.on("input", (e) => setMonth(e.target.value, false));
+
+function tick() {
+  const next = current === 12 ? 1 : current + 1;
+  setMonth(next);
+}
+
+function start() {
+  if (playing) return;
+  playing = true;
+  playBtn.text("⏸ Pause");
+  timer = d3.interval(tick, 900);
+}
+
+function stop() {
+  playing = false;
+  playBtn.text("▶ Play");
+  if (timer) timer.stop();
+}
+
+playBtn.on("click", () => playing ? stop() : start());
+
+// keyboard: ←/→ to step, space to play/pause
+d3.select(window).on("keydown", (e) => {
+  if (e.key === " ") { e.preventDefault(); playing ? stop() : start(); }
+  if (e.key === "ArrowRight") { stop(); tick(); }
+  if (e.key === "ArrowLeft")  { stop(); setMonth(current===1?12:current-1); }
+});
+
+// initialize
+setMonth(1, true);
+</script>
+</body>
+</html>
