@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>U.S. Climate Map (MODIS)</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson@3"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h2>U.S. Climate Map (MODIS 2024–2025)</h2>
+
+  <div class="controls">
+    <label for="variableSelect">Variable:</label>
+    <select id="variableSelect"></select>
+
+    <label id="monthLabel">Month: 1</label>
+    <input type="range" id="monthSlider" min="1" max="12" step="1" value="1" />
+  </div>
+
+  <div id="map"></div>
+  <div class="tooltip" id="tooltip" style="opacity:0;"></div>
+
+  <!-- Load our custom script -->
+  <script src="script.js"></script>
+</body>
+</html>
