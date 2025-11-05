@@ -1,27 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>U.S. Climate Map (MODIS)</title>
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/topojson@3"></script>
-  <link rel="stylesheet" href="style.css" />
+ <meta charset="utf-8" />
+ <meta name="viewport" content="width=device-width,initial-scale=1" />
+ <title>US Climate Map</title>
+ <link rel="stylesheet" href="style.css" />
+ <script src="https://d3js.org/d3.v7.min.js"></script>
+ <script src="https://unpkg.com/topojson@3"></script>
 </head>
 <body>
-  <h2>U.S. Climate Map (MODIS 2024–2025)</h2>
+ <div id="controls">
+   <h1>US Climate Data (2024–2025)</h1>
 
-  <div class="controls">
-    <label for="variableSelect">Variable:</label>
-    <select id="variableSelect"></select>
 
-    <label id="monthLabel">Month: 1</label>
-    <input type="range" id="monthSlider" min="1" max="12" step="1" value="1" />
-  </div>
+   <div class="control-row">
+     <label for="variableSelect">Select Variable:</label>
+     <select id="variableSelect"></select>
+   </div>
 
-  <div id="map"></div>
-  <div class="tooltip" id="tooltip" style="opacity:0;"></div>
 
-  <!-- Load our custom script -->
-  <script src="script.js"></script>
+   <div class="control-row">
+     <label id="monthLabel" for="monthSlider">January 2024</label>
+     <input type="range" id="monthSlider" min="0" max="0" value="0" step="1">
+     <button id="playPauseBtn" title="Play/Pause">▶ Play</button>
+   </div>
+ </div>
+
+
+ <div id="map"></div>
+ <div id="legend"></div>
+ <div id="tooltip"></div>
+
+
+ <script src="script.js"></script>
 </body>
 </html>

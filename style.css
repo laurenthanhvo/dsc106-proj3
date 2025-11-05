@@ -1,109 +1,118 @@
-/* ======== Global Page Styles ======== */
 body {
-  font-family: 'Inter', system-ui, sans-serif;
-  background-color: #0d1117;
-  color: #e6edf3;
-  margin: 0;
-  padding: 0;
-  text-align: center;
+ font-family: "Inter", sans-serif;
+ background-color: #0d1117;
+ color: #f0f6fc;
+ text-align: center;
+ margin: 0;
+ padding: 0;
 }
 
-/* ======== Title ======== */
-h2 {
-  margin-top: 25px;
-  font-weight: 600;
-  font-size: 1.8rem;
-  color: #f0f6fc;
+
+h1 {
+ margin-bottom: 0.5rem;
+ color: #58a6ff;
 }
 
-/* ======== Dropdown Controls ======== */
-.controls {
-  margin: 20px 0;
+
+#controls {
+ padding: 1rem;
+ background-color: #161b22;
+ border-bottom: 1px solid #30363d;
 }
+
+
+.control-row {
+ margin: 0.5rem 0;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ gap: 0.6rem;
+}
+
 
 label {
-  font-size: 1rem;
-  margin-right: 8px;
-  color: #adb6c4;
+ white-space: nowrap;
 }
 
-select {
-  background-color: #161b22;
-  color: #e6edf3;
-  border: 1px solid #30363d;
-  border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 15px;
-  cursor: pointer;
-  transition: 0.2s ease-in-out;
+
+#monthLabel {
+ width: 160px; /* keeps text width consistent */
+ text-align: right;
 }
 
-select:hover {
-  background-color: #21262d;
-  border-color: #8b949e;
+
+select,
+input[type="range"] {
+ background-color: #0d1117;
+ border: 1px solid #30363d;
+ color: #f0f6fc;
+ padding: 0.3rem;
+ border-radius: 5px;
 }
 
-/* ======== Map Container ======== */
+
+input[type="range"] {
+ width: 300px; /* fixed width for stability */
+}
+
+
+/* Play/Pause button */
+#playPauseBtn {
+ margin-left: 8px;
+ padding: 6px 10px;
+ background: linear-gradient(135deg,#2b7bd6,#1b5fa8);
+ color: #fff;
+ border: none;
+ border-radius: 6px;
+ cursor: pointer;
+ font-weight: 600;
+ box-shadow: 0 4px 12px rgba(27,95,168,0.25);
+}
+#playPauseBtn:hover { transform: translateY(-1px); }
+
+
 #map {
-  width: 960px;
-  height: 600px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ padding: 1rem;
 }
+
 
 svg {
-  width: 100%;
-  height: 100%;
-  background-color: #0e1014;
-  border-radius: 12px;
-  box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+ background-color: #111;
+ border-radius: 12px;
+ box-shadow: 0 0 20px rgba(88, 166, 255, 0.1);
 }
 
-/* ======== Tooltip ======== */
-.tooltip {
-  position: absolute;
-  background: rgba(18, 21, 25, 0.9);
-  color: #fff;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 14px;
-  pointer-events: none;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-  line-height: 1.4;
-  transition: opacity 0.15s ease;
+
+#tooltip {
+ position: absolute;
+ background: rgba(0, 0, 0, 0.85);
+ color: white;
+ padding: 8px 12px;
+ border-radius: 6px;
+ pointer-events: none;
+ opacity: 0;
+ font-size: 0.9rem;
+ border: 1px solid #58a6ff;
+ transition: opacity 0.2s ease;
 }
 
-.tooltip strong {
-  color: #4cc9f0;
+
+#legend {
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ margin-top: -10px;
+ margin-bottom: 20px;
 }
 
-/* ======== Legend ======== */
-.legend {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  margin-top: 18px;
-  font-size: 0.9rem;
-  color: #b1bac4;
-}
 
-.legend svg {
-  width: 200px;
-  height: 12px;
-  border-radius: 5px;
-}
-
-.legend text {
-  fill: #b1bac4;
-  font-size: 12px;
-}
-
-/* ======== Footer ======== */
-footer {
-  margin-top: 30px;
-  font-size: 0.85rem;
-  color: #777;
+.legend-bar {
+ height: 15px;
+ width: 300px;
+ border-radius: 6px;
+ border: 1px solid #30363d;
+ margin: 0 10px;
 }
