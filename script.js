@@ -1,266 +1,252 @@
 const width = 960;
 const height = 600;
 
-
 const svg = d3.select("#map")
- .append("svg")
- .attr("width", width)
- .attr("height", height);
-
+  .append("svg")
+  .attr("width", width)
+  .attr("height", height);
 
 const tooltip = d3.select("#tooltip");
-const legendContainer = d3.select("#legend");
 
+// --- Line chart setup ---
+const chartWidth = 700;
+const chartHeight = 200;
+const chartMargin = { top: 20, right: 40, bottom: 40, left: 60 };
 
-let playInterval = null;
-let isPlaying = false;
-const playDelayMs = 1000; // 1 second per step
+const chartSvg = d3.select("#chart")
+  .append("svg")
+  .attr("width", chartWidth)
+  .attr("height", chartHeight);
 
+const chartArea = chartSvg.append("g")
+  .attr("transform", `translate(${chartMargin.left},${chartMargin.top})`);
+
+const xScale = d3.scalePoint().range([0, chartWidth - chartMargin.left - chartMargin.right]);
+const yScale = d3.scaleLinear().range([chartHeight - chartMargin.top - chartMargin.bottom, 0]);
+
+const lineGenerator = d3.line()
+  .x(d => xScale(d["Year-Month"]))
+  .y(d => yScale(d.value));
+
+const chartTitle = d3.select("#chart-title");
 
 Promise.all([
- d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json"),
- d3.csv("data/modis_us_state_2024_2025.csv")
+  d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json"),
+  d3.csv("data/modis_us_state_2024_2025_converted.csv")
 ]).then(([us, data]) => {
 
-
- // Convert and clean data
- data.forEach(d => {
-   d.Average_Value = +d.Average_Value;
-   d.Month = +d.Month;
-   d.Year = +d.Year;
- });
-
-
- const variables = Array.from(new Set(data.map(d => d.Variable))).sort();
-
-
- // Units for variables
- const units = {
-   "Vegetation Index (NDVI)": "NDVI",
-   "Evapotranspiration (mm/day)": "mm/day",
-   "Land Surface Temp (°C)": "°C"
- };
-
-
- // Populate dropdown
- const variableSelect = d3.select("#variableSelect");
- variableSelect
-   .selectAll("option")
-   .data(variables)
-   .enter()
-   .append("option")
-   .text(d => d)
-   .attr("value", d => d);
-
-
- // Build sorted list of all unique (Year, Month) pairs
- const timeSteps = Array.from(
-   new Set(data.map(d => `${d.Year}-${String(d.Month).padStart(2, "0")}`))
- ).sort();
-
-
- let currentVariable = variables[0];
- let currentIndex = 0;
-
-
- const color = d3.scaleSequential(d3.interpolateViridis);
-
-
- const projection = d3.geoAlbersUsa()
-   .scale(1000)
-   .translate([width / 2, height / 2]);
-
-
- const path = d3.geoPath(projection);
- const states = topojson.feature(us, us.objects.states).features;
-
-
- // Slider setup (STATIC)
- const slider = d3.select("#monthSlider")
-   .attr("min", 0)
-   .attr("max", timeSteps.length - 1)
-   .attr("value", 0)
-   .style("width", "300px");
-
-
- function getMonthYearLabel(step) {
-   const [year, month] = step.split("-");
-   const monthNames = [
-     "January", "February", "March", "April", "May", "June",
-     "July", "August", "September", "October", "November", "December"
-   ];
-   return `${monthNames[+month - 1]} ${year}`;
- }
-
-
- // ✅ Precompute global min and max per variable (for consistent legend)
- const globalRanges = {};
- variables.forEach(v => {
-   const vals = data.filter(d => d.Variable === v).map(d => d.Average_Value);
-   globalRanges[v] = [d3.min(vals), d3.max(vals)];
- });
-
-
- function updateLegend(min, max) {
-   legendContainer.html("");
-
-
-   const legendSvg = legendContainer.append("svg")
-     .attr("width", 360)
-     .attr("height", 60);
-
-
-   const defs = legendSvg.append("defs");
-   const gradient = defs.append("linearGradient")
-     .attr("id", "legend-gradient");
-
-
-   const stops = d3.range(0, 1.01, 0.1);
-   stops.forEach(s => {
-     gradient.append("stop")
-       .attr("offset", `${s * 100}%`)
-       .attr("stop-color", color(s * (max - min) + min));
-   });
-
-
-   legendSvg.append("rect")
-     .attr("x", 30)
-     .attr("y", 15)
-     .attr("width", 300)
-     .attr("height", 15)
-     .style("fill", "url(#legend-gradient)")
-     .attr("rx", 4);
-
-
-   legendSvg.append("text")
-     .attr("x", 30)
-     .attr("y", 50)
-     .attr("fill", "#ccc")
-     .attr("font-size", 12)
-     .text(`${min.toFixed(2)}`);
-
-
-   legendSvg.append("text")
-     .attr("x", 320)
-     .attr("y", 50)
-     .attr("fill", "#ccc")
-     .attr("font-size", 12)
-     .attr("text-anchor", "end")
-     .text(`${max.toFixed(2)} ${units[currentVariable] || ""}`);
-
-
-   legendSvg.append("text")
-     .attr("x", 180)
-     .attr("y", 10)
-     .attr("text-anchor", "middle")
-     .attr("fill", "#58a6ff")
-     .attr("font-size", 13)
-     .text(`${currentVariable} ${units[currentVariable] ? `(${units[currentVariable]})` : ""}`);
- }
-
-
- function updateMap() {
-   const [year, monthStr] = timeSteps[currentIndex].split("-");
-   const month = +monthStr;
-
-
-   const filtered = data.filter(d =>
-     d.Variable === currentVariable &&
-     d.Year === +year &&
-     d.Month === month
-   );
-
-
-   const valueByState = {};
-   filtered.forEach(d => {
-     valueByState[d.State] = d.Average_Value;
-   });
-
-
-   // ✅ Use global min/max for the selected variable
-   const [globalMin, globalMax] = globalRanges[currentVariable];
-   color.domain([globalMin, globalMax]);
-   updateLegend(globalMin, globalMax);
-
-
-   const paths = svg.selectAll("path").data(states);
-
-
-   paths.enter()
-     .append("path")
-     .merge(paths)
-     .attr("d", path)
-     .attr("fill", d => {
-       const val = valueByState[d.properties.name];
-       return val !== undefined && !isNaN(val) ? color(val) : "#333";
-     })
-     .attr("stroke", "#111")
-     .on("mousemove", (event, d) => {
-       const stateName = d.properties.name;
-       const stats = data.filter(x =>
-         x.State === stateName && x.Year === +year && x.Month === month
-       );
-
-
-       let html = `<b>${stateName}</b><br>${getMonthYearLabel(timeSteps[currentIndex])}<br>`;
-       if (stats.length > 0) {
-         stats.forEach(s => {
-           html += `${s.Variable}: ${s.Average_Value.toFixed(2)} ${units[s.Variable] || ""}<br>`;
-         });
-       } else {
-         html += "No data";
-       }
-
-
-       tooltip.style("opacity", 1)
-         .html(html)
-         .style("left", (event.pageX + 10) + "px")
-         .style("top", (event.pageY - 20) + "px");
-     })
-     .on("mouseout", () => tooltip.style("opacity", 0));
-
-
-   d3.select("#monthLabel").text(getMonthYearLabel(timeSteps[currentIndex]));
-   slider.property("value", currentIndex);
- }
-
-
- // Play/pause controls
- const playPauseBtn = d3.select("#playPauseBtn");
- function startPlay() {
-   if (isPlaying) return;
-   isPlaying = true;
-   playPauseBtn.text("⏸ Pause").attr("title", "Pause");
-   playInterval = setInterval(() => {
-     currentIndex = (currentIndex + 1) % timeSteps.length;
-     updateMap();
-   }, playDelayMs);
- }
- function stopPlay() {
-   isPlaying = false;
-   playPauseBtn.text("▶ Play").attr("title", "Play");
-   if (playInterval) {
-     clearInterval(playInterval);
-     playInterval = null;
-   }
- }
- playPauseBtn.on("click", () => {
-   if (isPlaying) stopPlay(); else startPlay();
- });
-
-
- variableSelect.on("change", function () {
-   currentVariable = this.value;
-   updateMap();
- });
-
-
- slider.on("input", function () {
-   currentIndex = +this.value;
-   updateMap();
- });
-
-
- // initial render
- updateMap();
+  // Parse numeric columns
+  data.forEach(d => {
+    d["Vegetation Index (NDVI)"] = +d["Vegetation Index (NDVI)"];
+    d["Land Surface Temp (°F)"] = +d["Land Surface Temp (°F)"];
+    d["Evapotranspiration (mm/day)"] = +d["Evapotranspiration (mm/day)"];
+    const [year, month] = d["Year-Month"].split("-");
+    d.year = +year;
+    d.month = +month;
+  });
+
+  const variables = [
+    "Vegetation Index (NDVI)",
+    "Land Surface Temp (°F)",
+    "Evapotranspiration (mm/day)"
+  ];
+
+  const colors = {
+    "Vegetation Index (NDVI)": d3.schemeGreens[6],
+    "Land Surface Temp (°F)": d3.schemeReds[6],
+    "Evapotranspiration (mm/day)": d3.schemeBlues[6]
+  };
+
+  const variableSelect = d3.select("#variableSelect");
+  variableSelect.selectAll("option")
+    .data(variables)
+    .enter().append("option")
+    .text(d => d)
+    .attr("value", d => d);
+
+  let currentVariable = variables[0];
+
+  const allMonths = Array.from(new Set(data.map(d => d["Year-Month"]))).sort();
+  let currentMonthIndex = 0;
+
+  const monthSlider = d3.select("#monthSlider")
+    .attr("min", 0)
+    .attr("max", allMonths.length - 1)
+    .attr("value", currentMonthIndex);
+
+  // Month formatting
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  function formatMonthLabel(ym) {
+    const [year, month] = ym.split("-");
+    return `${monthNames[+month - 1]} ${year}`;
+  }
+
+  const monthLabel = d3.select("#monthLabel");
+  monthLabel.text(formatMonthLabel(allMonths[currentMonthIndex]));
+
+  const projection = d3.geoAlbersUsa().scale(1000).translate([width / 2, height / 2]);
+  const path = d3.geoPath(projection);
+  const states = topojson.feature(us, us.objects.states).features;
+
+  const valueExtent = {};
+  variables.forEach(v => {
+    valueExtent[v] = d3.extent(data, d => d[v]);
+  });
+
+  function getColor(val, variable) {
+    const scale = d3.scaleQuantize()
+      .domain(valueExtent[variable])
+      .range(colors[variable]);
+    return val != null ? scale(val) : "#444";
+  }
+
+  function drawLineChart(stateName) {
+    const stateData = data
+      .filter(d => d.State === stateName)
+      .map(d => ({
+        "Year-Month": d["Year-Month"],
+        value: d[currentVariable]
+      }))
+      .sort((a, b) => d3.ascending(a["Year-Month"], b["Year-Month"]));
+
+    if (stateData.length === 0) return;
+
+    chartTitle.text(`${stateName} — ${currentVariable}`);
+
+    xScale.domain(stateData.map(d => d["Year-Month"]));
+    yScale.domain(d3.extent(stateData, d => d.value));
+
+    chartArea.selectAll("*").remove();
+
+    // X-axis
+    chartArea.append("g")
+      .attr("transform", `translate(0,${chartHeight - chartMargin.top - chartMargin.bottom})`)
+      .call(d3.axisBottom(xScale)
+        .tickValues(xScale.domain().filter((d, i) => i % 2 === 0))
+        .tickFormat(d => {
+          const [y, m] = d.split("-");
+          const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                              "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+          return monthNames[+m - 1] + " " + y.slice(2);
+        }));
+
+    // Y-axis
+    chartArea.append("g")
+      .call(d3.axisLeft(yScale).ticks(6));
+
+    // Line
+    chartArea.append("path")
+      .datum(stateData)
+      .attr("fill", "none")
+      .attr("stroke", "#58a6ff")
+      .attr("stroke-width", 2)
+      .attr("d", lineGenerator);
+
+    // Dots
+    chartArea.selectAll(".dot")
+      .data(stateData)
+      .enter().append("circle")
+      .attr("class", "dot")
+      .attr("cx", d => xScale(d["Year-Month"]))
+      .attr("cy", d => yScale(d.value))
+      .attr("r", 3)
+      .attr("fill", "#58a6ff");
+  }
+
+  function updateMap() {
+    const month = allMonths[currentMonthIndex];
+    const filtered = data.filter(d => d["Year-Month"] === month);
+    const valueByState = {};
+    filtered.forEach(d => valueByState[d.State] = d[currentVariable]);
+
+    const paths = svg.selectAll("path").data(states);
+
+    paths.enter()
+      .append("path")
+      .merge(paths)
+      .attr("d", path)
+      .attr("fill", d => getColor(valueByState[d.properties.name], currentVariable))
+      .attr("stroke", "#222")
+      .on("mousemove", (event, d) => {
+        const stateName = d.properties.name;
+        const val = valueByState[stateName];
+        tooltip.transition().duration(100).style("opacity", 1);
+        tooltip.html(`
+          <b>${stateName}</b><br>
+          ${currentVariable}: ${val !== undefined ? val.toFixed(2) : "N/A"}
+        `)
+          .style("left", (event.pageX + 10) + "px")
+          .style("top", (event.pageY - 20) + "px");
+
+        // Draw or update chart (persistent)
+        drawLineChart(stateName);
+      })
+      .on("mouseout", () => {
+        tooltip.transition().duration(200).style("opacity", 0);
+      });
+
+    paths.exit().remove();
+    updateLegend();
+  }
+
+  function updateLegend() {
+    const legend = d3.select("#legend");
+    legend.selectAll("*").remove();
+
+    const scale = d3.scaleQuantize()
+      .domain(valueExtent[currentVariable])
+      .range(colors[currentVariable]);
+
+    const bins = scale.range().map(d => scale.invertExtent(d));
+
+    legend.append("div")
+      .attr("class", "legend-title")
+      .text(currentVariable);
+
+    bins.forEach((b, i) => {
+      const item = legend.append("div").attr("class", "legend-item");
+      item.append("div")
+        .attr("class", "legend-color")
+        .style("background-color", colors[currentVariable][i]);
+      item.append("span")
+        .text(`${b[0].toFixed(2)} – ${b[1].toFixed(2)}`);
+    });
+  }
+
+  variableSelect.on("change", function() {
+    currentVariable = this.value;
+    updateMap();
+  });
+
+  monthSlider.on("input", function() {
+    currentMonthIndex = +this.value;
+    monthLabel.text(formatMonthLabel(allMonths[currentMonthIndex]));
+    updateMap();
+  });
+
+  // --- Play Button (slow + smooth) ---
+  let playing = false;
+  let playInterval;
+
+  d3.select("#playButton").on("click", function() {
+    playing = !playing;
+    d3.select(this).text(playing ? "Pause" : "Play");
+
+    if (playing) {
+      playInterval = setInterval(() => {
+        currentMonthIndex = (currentMonthIndex + 1) % allMonths.length;
+        monthSlider.property("value", currentMonthIndex);
+        monthLabel.text(formatMonthLabel(allMonths[currentMonthIndex]));
+        updateMap();
+      }, 1000);
+    } else {
+      clearInterval(playInterval);
+    }
+  });
+
+  updateMap();
 });

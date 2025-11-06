@@ -1,118 +1,141 @@
 body {
- font-family: "Inter", sans-serif;
- background-color: #0d1117;
- color: #f0f6fc;
- text-align: center;
- margin: 0;
- padding: 0;
+  font-family: "Inter", sans-serif;
+  background-color: #0d1117;
+  color: #f0f6fc;
+  text-align: center;
+  margin: 0;
+  padding: 0;
 }
-
 
 h1 {
- margin-bottom: 0.5rem;
- color: #58a6ff;
+  margin-bottom: 0.5rem;
+  color: #58a6ff;
 }
-
 
 #controls {
- padding: 1rem;
- background-color: #161b22;
- border-bottom: 1px solid #30363d;
+  padding: 1rem;
+  background-color: #161b22;
+  border-bottom: 1px solid #30363d;
 }
-
 
 .control-row {
- margin: 0.5rem 0;
- display: flex;
- justify-content: center;
- align-items: center;
- gap: 0.6rem;
+  margin: 0.5rem 0;
 }
-
 
 label {
- white-space: nowrap;
+  margin-right: 0.5rem;
 }
-
-
-#monthLabel {
- width: 160px; /* keeps text width consistent */
- text-align: right;
-}
-
 
 select,
-input[type="range"] {
- background-color: #0d1117;
- border: 1px solid #30363d;
- color: #f0f6fc;
- padding: 0.3rem;
- border-radius: 5px;
+input[type="range"],
+button {
+  background-color: #0d1117;
+  border: 1px solid #30363d;
+  color: #f0f6fc;
+  padding: 0.3rem;
+  border-radius: 5px;
 }
 
-
-input[type="range"] {
- width: 300px; /* fixed width for stability */
+button {
+  cursor: pointer;
 }
 
-
-/* Play/Pause button */
-#playPauseBtn {
- margin-left: 8px;
- padding: 6px 10px;
- background: linear-gradient(135deg,#2b7bd6,#1b5fa8);
- color: #fff;
- border: none;
- border-radius: 6px;
- cursor: pointer;
- font-weight: 600;
- box-shadow: 0 4px 12px rgba(27,95,168,0.25);
+#map-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 30px;
+  padding: 1rem;
 }
-#playPauseBtn:hover { transform: translateY(-1px); }
-
 
 #map {
- display: flex;
- justify-content: center;
- align-items: center;
- padding: 1rem;
+  flex-shrink: 0;
 }
-
 
 svg {
- background-color: #111;
- border-radius: 12px;
- box-shadow: 0 0 20px rgba(88, 166, 255, 0.1);
+  background-color: #111;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(88, 166, 255, 0.1);
 }
-
 
 #tooltip {
- position: absolute;
- background: rgba(0, 0, 0, 0.85);
- color: white;
- padding: 8px 12px;
- border-radius: 6px;
- pointer-events: none;
- opacity: 0;
- font-size: 0.9rem;
- border: 1px solid #58a6ff;
- transition: opacity 0.2s ease;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  pointer-events: none;
+  opacity: 0;
+  font-size: 0.9rem;
+  border: 1px solid #58a6ff;
+  transition: opacity 0.2s ease;
 }
-
 
 #legend {
- display: flex;
- justify-content: center;
- align-items: center;
- margin-top: -10px;
- margin-bottom: 20px;
+  background-color: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 0.85rem;
+  color: #c9d1d9;
+  min-width: 160px;
 }
 
+.legend-title {
+  color: #58a6ff;
+  font-weight: bold;
+  margin-bottom: 6px;
+  text-align: center;
+}
 
-.legend-bar {
- height: 15px;
- width: 300px;
- border-radius: 6px;
- border: 1px solid #30363d;
- margin: 0 10px;
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin: 3px 0;
+}
+
+.legend-color {
+  width: 24px;
+  height: 16px;
+  border: 1px solid #30363d;
+  border-radius: 3px;
+  margin-right: 8px;
+}
+
+/* --- Month slider + play alignment --- */
+.time-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+#monthLabel {
+  min-width: 130px;
+  text-align: right;
+  font-weight: 500;
+  color: #c9d1d9;
+}
+
+#monthSlider {
+  flex: 0 1 300px;
+}
+
+/* --- Chart --- */
+#chart-container {
+  margin-top: 1rem;
+  background-color: #161b22;
+  border-top: 1px solid #30363d;
+  padding: 1rem;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(88, 166, 255, 0.05);
+}
+
+#chart-title {
+  color: #58a6ff;
+  margin-bottom: 0.5rem;
 }

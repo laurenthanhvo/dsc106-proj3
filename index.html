@@ -1,37 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <meta charset="utf-8" />
- <meta name="viewport" content="width=device-width,initial-scale=1" />
- <title>US Climate Map</title>
- <link rel="stylesheet" href="style.css" />
- <script src="https://d3js.org/d3.v7.min.js"></script>
- <script src="https://unpkg.com/topojson@3"></script>
+  <meta charset="UTF-8">
+  <title>US States MODIS Data (2024–2025)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
- <div id="controls">
-   <h1>US Climate Data (2024–2025)</h1>
+  <h1>US States Environmental Data (MODIS)</h1>
 
+  <div id="controls">
+    <div class="control-row">
+      <label for="variableSelect">Variable:</label>
+      <select id="variableSelect"></select>
+    </div>
 
-   <div class="control-row">
-     <label for="variableSelect">Select Variable:</label>
-     <select id="variableSelect"></select>
-   </div>
+    <!-- Month label left, slider centered, play button right -->
+    <div class="control-row time-controls">
+      <span id="monthLabel">January 2024</span>
+      <input type="range" id="monthSlider" min="0" max="0" value="0" step="1">
+      <button id="playButton">Play</button>
+    </div>
+  </div>
 
+  <div id="map-container">
+    <div id="map"></div>
+    <div id="legend"></div>
+  </div>
 
-   <div class="control-row">
-     <label id="monthLabel" for="monthSlider">January 2024</label>
-     <input type="range" id="monthSlider" min="0" max="0" value="0" step="1">
-     <button id="playPauseBtn" title="Play/Pause">▶ Play</button>
-   </div>
- </div>
+  <!-- Line chart for hovered state -->
+  <div id="chart-container">
+    <h3 id="chart-title"></h3>
+    <div id="chart"></div>
+  </div>
 
+  <div id="tooltip"></div>
 
- <div id="map"></div>
- <div id="legend"></div>
- <div id="tooltip"></div>
-
-
- <script src="script.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://unpkg.com/topojson@3"></script>
+  <script src="script.js"></script>
 </body>
 </html>
