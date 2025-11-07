@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>US States MODIS Data (2024–2025)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <h1>US States Environmental Data (MODIS)</h1>
@@ -15,10 +15,9 @@
       <select id="variableSelect"></select>
     </div>
 
-    <!-- Month label left, slider centered, play button right -->
     <div class="control-row time-controls">
       <span id="monthLabel">January 2024</span>
-      <input type="range" id="monthSlider" min="0" max="0" value="0" step="1">
+      <input type="range" id="monthSlider" min="0" max="0" value="0" step="1" />
       <button id="playButton">Play</button>
     </div>
   </div>
@@ -28,10 +27,15 @@
     <div id="legend"></div>
   </div>
 
-  <!-- Line chart for hovered state -->
   <div id="chart-container">
-    <h3 id="chart-title"></h3>
-    <div id="chart"></div>
+    <div id="chart-left">
+      <h3 id="chart-title"></h3>
+      <div id="chart"></div>
+    </div>
+    <div id="chart-info">
+      <h4>Details</h4>
+      <div id="chart-info-content">Click a state to view details</div>
+    </div>
   </div>
 
   <div id="tooltip"></div>

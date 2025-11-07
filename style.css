@@ -8,14 +8,14 @@ body {
 }
 
 h1 {
-  margin-bottom: 0.5rem;
   color: #58a6ff;
+  margin-bottom: 0.5rem;
 }
 
 #controls {
-  padding: 1rem;
   background-color: #161b22;
   border-bottom: 1px solid #30363d;
+  padding: 1rem;
 }
 
 .control-row {
@@ -103,7 +103,6 @@ svg {
   margin-right: 8px;
 }
 
-/* --- Month slider + play alignment --- */
 .time-controls {
   display: flex;
   align-items: center;
@@ -124,18 +123,52 @@ svg {
 
 /* --- Chart --- */
 #chart-container {
-  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   background-color: #161b22;
   border-top: 1px solid #30363d;
+  margin-top: 1rem;
   padding: 1rem;
+  border-radius: 10px;
+  gap: 40px;
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
-  border-radius: 10px;
   box-shadow: 0 0 10px rgba(88, 166, 255, 0.05);
 }
 
 #chart-title {
   color: #58a6ff;
   margin-bottom: 0.5rem;
+}
+
+#chart-info {
+  text-align: left;
+  min-width: 180px;
+  background-color: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 0.9rem;
+  color: #c9d1d9;
+}
+
+#chart-info h4 {
+  color: #58a6ff;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+/* Chart tracker tooltip */
+.chart-tooltip {
+  background: rgba(0, 0, 0, 0.92);
+  color: #fff;
+  border: 1px solid #58a6ff;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
