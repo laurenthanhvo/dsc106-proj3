@@ -80,14 +80,15 @@ svg {
   text-align: left;
   font-size: 0.85rem;
   color: #c9d1d9;
-  min-width: 160px;
+  min-width: 200px;
+  
 }
 
 .legend-title {
   color: #58a6ff;
   font-weight: bold;
   margin-bottom: 6px;
-  text-align: center;
+  /* text-align: center; */
 }
 
 .legend-item {
