@@ -8,6 +8,7 @@ body {
 }
 
 h1 {
+  font-family: "Garamond", sans-serif;
   color: #58a6ff;
   margin-bottom: 0.5rem;
 }
@@ -117,8 +118,52 @@ svg {
   color: #c9d1d9;
 }
 
+/* fix slider visuals */
 #monthSlider {
   flex: 0 1 300px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+/* Track */
+#monthSlider::-webkit-slider-runnable-track {
+  background: #30363d;
+  height: 6px;
+  border-radius: 3px;
+}
+
+#monthSlider::-moz-range-track {
+  background: #30363d;
+  height: 6px;
+  border-radius: 3px;
+}
+
+/* Thumb */
+#monthSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  background: #58a6ff;
+  border-radius: 50%;
+  border: none;
+  margin-top: -4px; /* center vertically */
+  margin-left: 0; /* remove the earlier -7px hack */
+  cursor: pointer;
+  position: relative;
+}
+
+#monthSlider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: #58a6ff;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
 }
 
 /* --- Chart --- */
@@ -140,6 +185,7 @@ svg {
 
 #chart-title {
   color: #58a6ff;
+  font-weight: 600;
   margin-bottom: 0.5rem;
 }
 
@@ -159,6 +205,8 @@ svg {
   margin-top: 0;
   margin-bottom: 8px;
 }
+
+
 
 /* Chart tracker tooltip */
 .chart-tooltip {
