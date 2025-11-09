@@ -1,21 +1,22 @@
 body {
   font-family: "Inter", sans-serif;
-  background-color: #0d1117;
-  color: #f0f6fc;
+  background-color: #181818; /* lighter than pure black */
+  color: #e6edf3;
   text-align: center;
   margin: 0;
   padding: 0;
 }
 
 h1 {
-  color: #58a6ff;
+  color: #4ea1ff; /* softer blue accent */
   margin-bottom: 0.5rem;
 }
 
 #controls {
-  background-color: #161b22;
-  border-bottom: 1px solid #30363d;
+  background-color: #202225;
+  border-bottom: 1px solid #2f3339;
   padding: 1rem;
+  border-radius: 0 0 10px 10px;
 }
 
 .control-row {
@@ -29,15 +30,21 @@ label {
 select,
 input[type="range"],
 button {
-  background-color: #0d1117;
-  border: 1px solid #30363d;
-  color: #f0f6fc;
-  padding: 0.3rem;
+  background-color: #1e1e1e;
+  border: 1px solid #3c3c3c;
+  color: #e6edf3;
+  padding: 0.35rem 0.5rem;
   border-radius: 5px;
 }
 
 button {
   cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+button:hover {
+  background-color: #2a2f35;
+  transform: translateY(-1px);
 }
 
 #map-container {
@@ -53,37 +60,37 @@ button {
 }
 
 svg {
-  background-color: #111;
+  background-color: #1c1f23;
   border-radius: 12px;
-  box-shadow: 0 0 20px rgba(88, 166, 255, 0.1);
+  box-shadow: 0 0 15px rgba(78, 161, 255, 0.08);
 }
 
 #tooltip {
   position: absolute;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(20, 20, 20, 0.95);
   color: white;
   padding: 8px 12px;
   border-radius: 6px;
   pointer-events: none;
   opacity: 0;
   font-size: 0.9rem;
-  border: 1px solid #58a6ff;
+  border: 1px solid #4ea1ff;
   transition: opacity 0.2s ease;
 }
 
 #legend {
-  background-color: #161b22;
-  border: 1px solid #30363d;
+  background-color: #202225;
+  border: 1px solid #2f3339;
   border-radius: 8px;
   padding: 10px 12px;
   text-align: left;
   font-size: 0.85rem;
-  color: #c9d1d9;
+  color: #d0d7de;
   min-width: 160px;
 }
 
 .legend-title {
-  color: #58a6ff;
+  color: #4ea1ff;
   font-weight: bold;
   margin-bottom: 6px;
   text-align: center;
@@ -98,7 +105,7 @@ svg {
 .legend-color {
   width: 24px;
   height: 16px;
-  border: 1px solid #30363d;
+  border: 1px solid #2f3339;
   border-radius: 3px;
   margin-right: 8px;
 }
@@ -126,8 +133,8 @@ svg {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  background-color: #161b22;
-  border-top: 1px solid #30363d;
+  background-color: #202225;
+  border-top: 1px solid #2f3339;
   margin-top: 1rem;
   padding: 1rem;
   border-radius: 10px;
@@ -135,36 +142,36 @@ svg {
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
-  box-shadow: 0 0 10px rgba(88, 166, 255, 0.05);
+  box-shadow: 0 0 10px rgba(78, 161, 255, 0.05);
 }
 
 #chart-title {
-  color: #58a6ff;
+  color: #4ea1ff;
   margin-bottom: 0.5rem;
 }
 
 #chart-info {
   text-align: left;
   min-width: 180px;
-  background-color: #0d1117;
-  border: 1px solid #30363d;
+  background-color: #181a1d;
+  border: 1px solid #2f3339;
   border-radius: 8px;
   padding: 10px;
   font-size: 0.9rem;
-  color: #c9d1d9;
+  color: #d0d7de;
 }
 
 #chart-info h4 {
-  color: #58a6ff;
+  color: #4ea1ff;
   margin-top: 0;
   margin-bottom: 8px;
 }
 
 /* Chart tracker tooltip */
 .chart-tooltip {
-  background: rgba(0, 0, 0, 0.92);
+  background: rgba(15, 15, 15, 0.95);
   color: #fff;
-  border: 1px solid #58a6ff;
+  border: 1px solid #4ea1ff;
   padding: 6px 8px;
   border-radius: 6px;
   font-size: 0.85rem;

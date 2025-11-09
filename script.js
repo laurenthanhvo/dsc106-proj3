@@ -137,13 +137,20 @@ Promise.all([
     const domain = cfg.domain;
     yScale.domain(domain);
 
-    const ticks = cfg.tickStep >= 1
-      ? d3.range(Math.ceil(domain[0]), Math.floor(domain[1]) + 1, cfg.tickStep)
-      : d3.range(domain[0], domain[1] + cfg.tickStep, cfg.tickStep);
+    let ticks = cfg.tickStep >= 1
+  ? d3.range(Math.ceil(domain[0]), Math.floor(domain[1]) + 1, cfg.tickStep)
+  : d3.range(domain[0], domain[1] + cfg.tickStep, cfg.tickStep);
 
-    yAxisG.call(
-      d3.axisLeft(yScale).tickValues(ticks).tickFormat(d => (cfg.tickStep < 1 ? d.toFixed(1) : d))
-    );
+if (variable === "Vegetation Index (NDVI)") {
+  ticks = ticks.filter((_, i) => i % 2 === 0);
+}
+
+yAxisG.call(
+  d3.axisLeft(yScale)
+    .tickValues(ticks)
+    .tickFormat(d => (cfg.tickStep < 1 ? d.toFixed(1) : d))
+);
+
 
     xAxisG.call(
       d3.axisBottom(xScale)
@@ -299,16 +306,21 @@ Promise.all([
   }
 
   function onMonthChange() {
-    d3.select("#monthLabel").text(formatMonthLabel(allMonths[currentMonthIndex]));
-    updateMap();
-    if (lockedState) {
-      const stateData = data
-        .filter(d => d.State === lockedState)
-        .map(d => ({ "Year-Month": d["Year-Month"], value: d[currentVariable] }))
-        .sort((a, b) => (a["Year-Month"] > b["Year-Month"] ? 1 : -1));
-      updateTrackerToMonth(currentMonthIndex, stateData, false);
-    }
+  d3.select("#monthLabel").text(formatMonthLabel(allMonths[currentMonthIndex]));
+  updateMap();
+
+  if (lockedState) {
+    const stateData = data
+      .filter(d => d.State === lockedState)
+      .map(d => ({ "Year-Month": d["Year-Month"], value: d[currentVariable] }))
+      .sort((a, b) => (a["Year-Month"] > b["Year-Month"] ? 1 : -1));
+
+    updateTrackerToMonth(currentMonthIndex, stateData, false);
+    const currentPoint = stateData.find(d => d["Year-Month"] === allMonths[currentMonthIndex]);
+    updateInfoBox(currentPoint, lockedState);
   }
+}
+
 
   monthSlider.on("input", function() {
     currentMonthIndex = +this.value;
