@@ -81,7 +81,7 @@ svg {
   font-size: 0.85rem;
   color: #c9d1d9;
   min-width: 200px;
-  
+
 }
 
 .legend-title {
@@ -192,7 +192,7 @@ svg {
 
 #chart-info {
   text-align: left;
-  min-width: 180px;
+  min-width: 250px;
   background-color: #0d1117;
   border: 1px solid #30363d;
   border-radius: 8px;
