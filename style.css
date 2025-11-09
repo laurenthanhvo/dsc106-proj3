@@ -1,6 +1,6 @@
 body {
   font-family: "Inter", sans-serif;
-  background-color: #181818; /* lighter than pure black */
+  background-color: #181818; 
   color: #e6edf3;
   text-align: center;
   margin: 0;
@@ -8,7 +8,7 @@ body {
 }
 
 h1 {
-  color: #4ea1ff; /* softer blue accent */
+  color: #4ea1ff; 
   margin-bottom: 0.5rem;
 }
 
@@ -167,7 +167,6 @@ svg {
   margin-bottom: 8px;
 }
 
-/* Chart tracker tooltip */
 .chart-tooltip {
   background: rgba(15, 15, 15, 0.95);
   color: #fff;
