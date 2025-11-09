@@ -53,9 +53,9 @@ button {
 }
 
 svg {
-  background-color: #111;
+  /* background-color: #111; */
   border-radius: 12px;
-  box-shadow: 0 0 20px rgba(88, 166, 255, 0.1);
+  /* box-shadow: 0 0 20px rgba(88, 166, 255, 0.1); */
 }
 
 #tooltip {
