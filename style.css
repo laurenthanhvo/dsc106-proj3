@@ -121,7 +121,6 @@ svg {
   color: #c9d1d9;
 }
 
-/* fix slider visuals */
 #monthSlider {
   flex: 0 1 300px;
   -webkit-appearance: none;
@@ -145,7 +144,6 @@ svg {
   border-radius: 3px;
 }
 
-/* Thumb */
 #monthSlider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
@@ -154,8 +152,8 @@ svg {
   background: #58a6ff;
   border-radius: 50%;
   border: none;
-  margin-top: -4px; /* center vertically */
-  margin-left: 0; /* remove the earlier -7px hack */
+  margin-top: -4px; 
+  margin-left: 0; 
   cursor: pointer;
   position: relative;
 }
@@ -169,7 +167,6 @@ svg {
   cursor: pointer;
 }
 
-/* --- Chart --- */
 #chart-container {
   display: flex;
   justify-content: center;
@@ -207,7 +204,6 @@ svg {
   margin-bottom: 8px;
 }
 
-/* Chart tracker tooltip */
 .chart-tooltip {
   background: rgba(15, 15, 15, 0.95);
   color: #fff;
@@ -234,4 +230,53 @@ hr {
     font-size: 0;
     border: 0;
     margin-bottom: 2rem;
+}
+
+body.writeup {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  line-height: 1.7;
+  text-align: left;
+}
+
+body.writeup h1, body.writeup h2 {
+  color: #4ea1ff;
+  margin-bottom: 0.5rem;
+}
+
+body.writeup p {
+  margin-bottom: 1rem;
+}
+
+body.writeup nav a {
+  color: #ccc;
+  text-decoration: none;
+}
+
+body.writeup nav a:hover {
+  color: #4ea1ff;
+}
+
+.button {
+  display: inline-block;
+  background-color: #4ea1ff;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.button:hover {
+  background-color: #4ea1ff;
+}
+
+.page-title {
+  text-align: center;
+  color: #4ea1ff; 
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  font-weight: 700;
 }

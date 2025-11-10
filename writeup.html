@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project 3 Write Up</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="writeup">
+  <header>
+    <h1>DSC106 WPM</h1>
+    <nav>
+      <a href="index.html">← Back to Main Page</a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h1 class="page-title">Writeup</h1>
+      <h2>Motivation</h2>
+      <p>
+        Our team wanted to visualize how seasonal changes affect environmental conditions across all 50 U.S. states. By exploring how vegetation, temperature, and evapotranspiration vary throughout the year, we aimed to highlight the diversity of regional climates and how they shift over time. We were motivated to turn complex satellite data into an interactive visualization that helps to clearly see how the U.S. climate responds to seasonal and climatic changes.
+      </p>
+    </section>
+
+    <section>
+      <h2>Rationale</h2>
+      <p>
+        We chose to use a map to visualize how the geographic placement of each U.S. state influences environmental patterns and seasonal variation. We considered using a bar chart or a scatterplot like what was suggested in class, but ultimately decided that using a map would be better to show how geographically the climate changes in a region of the United States. Using D3.js, we created an interactive map showing monthly changes in Vegetation Index (NDVI), Land Surface Temperature, and Evapotranspiration across the U.S. from January 2024 to September 2025.
+      </p>
+      <p>
+        Our data was sourced from MODIS satellite products, which provide measurements in scientific units that are not always easy to understand. To make the information more interpretable, we aggregated the data by state and month, calculating the mean value for each variable within state boundaries. For example, land surface temperature data were originally measured in Kelvin, which we then converted to Fahrenheit to make temperature trends easier to understand.
+      </p>
+      <p>
+        For visualization, we designed a distinct color palette for each variable to help users clearly differentiate between vegetation, temperature, and evapotranspiration patterns. We also binned the data into ranges, allowing users to easily recognize high and low values at a glance. This combination of consistent color scales and clear binning made the map both visually appealing and easy to interpret.
+      </p>
+      <p>
+        For our final design, we added a slider, play button, dropdown, hover, and clickable interaction. Since we are investigating how environmental patterns change throughout the seasons, it made sense for us to implement a slider that can help us see how data changes. If users did not want to move the slider themselves, we also implemented a play button that cycles through the months automatically. The dropdown is used for changing between each of the three variables we investigated, which acts as a filter and works in conjunction with the slider and play button. Another interaction we implemented was the hover such that when the user’s cursor glides over one of the states, a toolkit pops up to show the specific variable amount for that state. Lastly, when you click a state, a corresponding line chart appears below the map to show the change in variable of that state. We thought that a map and line chart would work well together since it is not easy interpreting changes in variables based on the color by itself.
+      </p>
+    </section>
+
+    <section>
+      <h2>Team Development Process</h2>
+      <p>
+        The most difficult part of this project was figuring out what we wanted to do, finding the data to do it, and ultimately accessing the data as it was not exactly clear how to download it as a public user. Our team brainstormed many ideas to design a project that analyzes environmental trends across the United States using MODIS satellite data. After exploring several options, we decided to focus on three key indicators of ecosystem and climate health: Vegetation Index (NDVI), Evapotranspiration, and Land Surface Temperature. Once we started rolling with our final idea, we started to extract specific data from the dataset and ideating what we wanted our interactive visualization to look like. This initial stage took us in total about 10 hours and 3 scrapped ideas (fog tracking, smog detection, Paris climate agreement effect).
+      </p>
+      <p>
+        We used Python and Seaborn for data cleaning, analysis, and exploratory visualization to validate trends and patterns, taking about 2 hours. Building on those insights, we then developed an interactive D3 map that visualizes month-by-month changes across all U.S. states, allowing users to explore regional climate dynamics in real time. This took the most time as we were still learning how to use D3 and took many hours over the course of the week, perhaps about 15 hours. After we completed the map visualization, we made a line plot to display how the selected variable changes over time to give viewers another way to look at and interpret the data. This was easier to implement than the map and thus took less time. Putting these two visualizations together on the website took a little more time to do because we were not sure how we wanted to structure everything or how to style it, but it did not take as long as we thought, maybe about 7 hours.
+      </p>
+      <p>
+        Our team consisted of <strong>Casey So</strong>, <strong>Keilani Li</strong>, <strong>Lauren Vo</strong>, and <strong>Lillian Tran</strong>. Lillian developed the legend and color scale for our D3.js visualization, while Casey handled data extraction, Lauren focused on data cleaning, and Keilani implemented website manipulation to make sure everything was clear and visually appealing to the viewer. We all pitched in to create the map, interactions, and gave feedback to each other’s iterations as needed. We also met up a couple times outside of class to brainstorm, work through problems, and understand what our expectations were for this project.
+      </p>
+    </section>
+  </main>
+</body>
+</html>
