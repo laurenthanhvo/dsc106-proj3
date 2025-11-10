@@ -60,9 +60,7 @@ button:hover {
 }
 
 svg {
-  background-color: #1c1f23;
   border-radius: 12px;
-  box-shadow: 0 0 15px rgba(78, 161, 255, 0.08);
 }
 
 #tooltip {
@@ -86,14 +84,14 @@ svg {
   text-align: left;
   font-size: 0.85rem;
   color: #d0d7de;
-  min-width: 160px;
+  min-width: 200px;
 }
 
 .legend-title {
   color: #4ea1ff;
   font-weight: bold;
   margin-bottom: 6px;
-  text-align: center;
+  /* text-align: center; */
 }
 
 .legend-item {
@@ -124,8 +122,52 @@ svg {
   color: #c9d1d9;
 }
 
+/* fix slider visuals */
 #monthSlider {
   flex: 0 1 300px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+/* Track */
+#monthSlider::-webkit-slider-runnable-track {
+  background: #30363d;
+  height: 6px;
+  border-radius: 3px;
+}
+
+#monthSlider::-moz-range-track {
+  background: #30363d;
+  height: 6px;
+  border-radius: 3px;
+}
+
+/* Thumb */
+#monthSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  background: #58a6ff;
+  border-radius: 50%;
+  border: none;
+  margin-top: -4px; /* center vertically */
+  margin-left: 0; /* remove the earlier -7px hack */
+  cursor: pointer;
+  position: relative;
+}
+
+#monthSlider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: #58a6ff;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
 }
 
 /* --- Chart --- */
@@ -152,7 +194,7 @@ svg {
 
 #chart-info {
   text-align: left;
-  min-width: 180px;
+  min-width: 250px;
   background-color: #181a1d;
   border: 1px solid #2f3339;
   border-radius: 8px;
@@ -167,6 +209,7 @@ svg {
   margin-bottom: 8px;
 }
 
+/* Chart tracker tooltip */
 .chart-tooltip {
   background: rgba(15, 15, 15, 0.95);
   color: #fff;

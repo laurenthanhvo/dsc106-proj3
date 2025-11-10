@@ -158,7 +158,7 @@ yAxisG.call(
         .tickFormat(d => {
           const [y, m] = d.split("-");
           const short = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-          return `${short[+m - 1]} ${y.slice(2)}`;
+          return `${short[+m - 1]} '${y.slice(2)}`;
         })
     );
   }
@@ -299,7 +299,7 @@ yAxisG.call(
 
   function clearChart() {
     chartArea.selectAll(".state-line, .dot").remove();
-    chartTitle.text("");
+    chartTitle.text("No State Selected");
     chartInfoBox.text("Click a state to view details");
     trackerDot.style("opacity", 0);
     trackerTooltip.style("opacity", 0);
