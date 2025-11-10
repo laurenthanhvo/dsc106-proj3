@@ -273,18 +273,18 @@ yAxisG.call(
       .attr("cx", x - chartMargin.left)
       .attr("cy", y - chartMargin.top);
 
-    const tooltipHtml = `${formatMonthLabel(point["Year-Month"])} — ${currentVariable}: ${point.value.toFixed(2)}`;
+    // const tooltipHtml = `${formatMonthLabel(point["Year-Month"])} — ${currentVariable}: ${point.value.toFixed(2)}`;
 
-    const chartRect = chartSvg.node().getBoundingClientRect();
-    const pageX = chartRect.left + x;
-    const pageY = chartRect.top + y;
+    // const chartRect = chartSvg.node().getBoundingClientRect();
+    // const pageX = chartRect.left + x;
+    // const pageY = chartRect.top + y;
 
-    trackerTooltip
-      .html(tooltipHtml)
-      .style("left", pageX - trackerTooltip.node().offsetWidth / 2 + "px")
-      .style("top", pageY - trackerTooltip.node().offsetHeight - 12 + "px");
+    // trackerTooltip
+    //   .html(tooltipHtml)
+    //   .style("left", pageX - trackerTooltip.node().offsetWidth / 2 + "px")
+    //   .style("top", pageY - trackerTooltip.node().offsetHeight - 12 + "px");
 
-    trackerTooltip.transition(t).style("opacity", 1);
+    // trackerTooltip.transition(t).style("opacity", 1);
   }
 
   function updateInfoBox(point, state) {
