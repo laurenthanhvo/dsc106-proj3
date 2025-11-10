@@ -75,9 +75,9 @@ const binsConfig = {
 };
 
 const colors = {
-  "Vegetation Index (NDVI)": d3.schemeGreens[6],
-  "Land Surface Temp (°F)": d3.schemeReds[6],
-  "Evapotranspiration (mm/day)": d3.schemeBlues[6]
+  "Vegetation Index (NDVI)": d3.schemeGreens[7],
+  "Land Surface Temp (°F)": d3.schemeReds[7],
+  "Evapotranspiration (mm/day)": d3.schemeBlues[7]
 };
 
 const monthNames = [
