@@ -68,8 +68,8 @@ const binsConfig = {
     tickStep: 0.1
   },
   "Evapotranspiration (mm/day)": {
-    breaks: [2, 4, 6, 8, 10, 12.05],
-    domain: [0, 12.05],
+    breaks: [2, 4, 6, 8, 10, 12],
+    domain: [0, 12],
     tickStep: 2
   }
 };
@@ -164,28 +164,46 @@ yAxisG.call(
   }
 
   function updateLegend(variable) {
-    const legend = d3.select("#legend");
-    legend.selectAll("*").remove();
+  const legend = d3.select("#legend");
+  legend.selectAll("*").remove();
 
-    const cfg = binsConfig[variable];
-    const pal = colors[variable];
+  const cfg = binsConfig[variable];
+  const pal = colors[variable];
 
-    legend.append("div").attr("class", "legend-title").text(variable);
+  legend.append("div")
+    .attr("class", "legend-title")
+    .text(variable);
 
-    const breaks = cfg.breaks;
-    const labels = [];
-    if (breaks.length > 0) {
-      labels.push(`< ${breaks[0]}`);
-      for (let i = 0; i < breaks.length - 1; i++) labels.push(`${breaks[i]} – ${breaks[i + 1]}`);
-      labels.push(`${breaks[breaks.length - 1]} – ${cfg.domain[1]}`);
+  const breaks = cfg.breaks;
+  const labels = [];
+
+  if (breaks.length > 0) {
+    // add "< first break" label
+    labels.push(`< ${breaks[0]}`);
+
+    // add interval labels up to # colors
+    for (let i = 0; i < pal.length - 1; i++) {
+      if (i + 1 < breaks.length) {
+        labels.push(`${breaks[i]} – ${breaks[i + 1]}`);
+      }
     }
 
-    labels.forEach((lab, i) => {
-      const item = legend.append("div").attr("class", "legend-item");
-      item.append("div").attr("class", "legend-color").style("background-color", pal[i]);
-      item.append("span").text(lab);
-    });
+    // if the # colors = # of breaks, stop
+    // else if one more color, add "≥ last break" label.
+    if (pal.length > breaks.length) {
+      labels.push(`≥ ${breaks[breaks.length - 1]}`);
+    }
   }
+
+  // build legend items
+  labels.forEach((lab, i) => {
+    const item = legend.append("div").attr("class", "legend-item");
+    item.append("div")
+      .attr("class", "legend-color")
+      .style("background-color", pal[i]);
+    item.append("span").text(lab);
+  });
+}
 
   function updateMap() {
     const month = allMonths[currentMonthIndex];
