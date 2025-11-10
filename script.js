@@ -1,5 +1,5 @@
-const width = 960;
-const height = 600;
+const width = 850;
+const height = 500;
 
 const svg = d3.select("#map").append("svg").attr("width", width).attr("height", height);
 const tooltip = d3.select("#tooltip");
@@ -59,12 +59,12 @@ const trackerTooltip = d3
 const binsConfig = {
   "Land Surface Temp (°F)": {
     breaks: [20, 40, 60, 80, 100],
-    domain: [0, 110],
-    tickStep: 10
+    domain: [0, 120], // make ticks easier to read
+    tickStep: 20
   },
   "Vegetation Index (NDVI)": {
     breaks: [-0.5, 0.2, 0.4, 0.6, 0.7, 0.8],
-    domain: [-0.5, 1.0],
+    domain: [-0.6, 1.0], // make ticks easier to read
     tickStep: 0.1
   },
   "Evapotranspiration (mm/day)": {
@@ -266,7 +266,7 @@ yAxisG.call(
     const x = chartMargin.left + xScale(point["Year-Month"]);
     const y = chartMargin.top + yScale(point.value);
 
-    const t = instant ? d3.transition().duration(0) : d3.transition().duration(500).ease(d3.easeCubic);
+    const t = instant ? d3.transition().duration(0) : d3.transition().duration(100).ease(d3.easeCubic);
     trackerDot
       .transition(t)
       .style("opacity", 1)
