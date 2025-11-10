@@ -266,6 +266,7 @@ body.writeup nav a:hover {
   border-radius: 8px;
   text-decoration: none;
   transition: background-color 0.2s;
+  margin-bottom: 1.2rem;
 }
 
 .button:hover {
