@@ -8,15 +8,14 @@ body {
 }
 
 h1 {
+  font-family: "FreeSerif", "sans-serif";
   color: #4ea1ff; 
-  margin-bottom: 0.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 }
 
 #controls {
-  background-color: #202225;
-  border-bottom: 1px solid #2f3339;
-  padding: 1rem;
-  border-radius: 0 0 10px 10px;
+  margin-top: 1rem;
 }
 
 .control-row {
@@ -184,7 +183,6 @@ svg {
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
-  box-shadow: 0 0 10px rgba(78, 161, 255, 0.05);
 }
 
 #chart-title {
@@ -220,4 +218,20 @@ svg {
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.2s ease;
+}
+
+#description {
+  font-family: Georgia; 
+  font-style: italic; 
+  font-size:16px;
+  margin-bottom: 1rem;
+}
+
+hr {
+    height: 2px;
+    color: #85beff;
+    background: #85beff;
+    font-size: 0;
+    border: 0;
+    margin-bottom: 2rem;
 }
