@@ -495,7 +495,6 @@ body > h1:first-of-type {
   opacity: 1;
 }
 
-/* Team badge */
 #team-name {
   display: inline-block;
   margin: 0.25rem auto 1.4rem;
@@ -510,7 +509,6 @@ body > h1:first-of-type {
   box-shadow: 0 8px 20px rgba(15, 23, 42, 0.9);
 }
 
-/* Main project title: "U.S Environmental Data (MODIS)" */
 body > h1:nth-of-type(2) {
   margin-top: 0;
   margin-bottom: 0.4rem;
