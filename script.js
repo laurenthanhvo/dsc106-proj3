@@ -74,9 +74,20 @@ const binsConfig = {
   }
 };
 
+// Cold → warm → hot palette for temperature
+const tempPalette = [
+  "#313695", // very cold  (< 20°F)
+  "#4575b4", // cold       (20–40)
+  "#74add1", // cool       (40–60)
+  "#ffffbf", // mild       (60–80)  ~ yellow
+  "#fdae61", // warm       (80–100)
+  "#f46d43", // hot        (≥100)
+  "#d73027"  // extremely hot 
+];
+
 const colors = {
   "Vegetation Index (NDVI)": d3.schemeGreens[7],
-  "Land Surface Temp (°F)": d3.schemeReds[7],
+  "Land Surface Temp (°F)": tempPalette,
   "Evapotranspiration (mm/day)": d3.schemeBlues[7]
 };
 

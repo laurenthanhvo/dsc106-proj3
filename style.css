@@ -1,128 +1,134 @@
+/* ---------- Global layout ---------- */
+
 body {
-  font-family: "Inter", sans-serif;
-  background-color: #181818; 
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background-color: #05070b;
+  background-image: radial-gradient(circle at 0% 0%, #111827 0, #05070b 55%);
   color: #e6edf3;
   text-align: center;
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 h1 {
-  font-family: "FreeSerif", "sans-serif";
-  color: #4ea1ff; 
-  margin-top: 2rem;
-  margin-bottom: 1rem;
+  font-family: "Inter", sans-serif;
+  color: #ffffff;
+  margin-top: 2.4rem;
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.05em;
+  font-size: 2.2rem;
 }
 
+/* Subtitle under title */
+#description {
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-size: 0.98rem;
+  margin-top: 0.2rem;
+  margin-bottom: 1.4rem;
+  color: #c9d1d9;
+}
+
+/* Accent rule under heading */
+hr {
+  height: 2px;
+  color: #3b82f6;
+  background: linear-gradient(90deg, #2563eb, #38bdf8);
+  font-size: 0;
+  border: 0;
+  margin: 0 0 2rem;
+  width: 100%;
+  max-width: 1100px;
+}
+
+/* A shared “page width” for main blocks */
+#controls,
+#map-container,
+#chart-container,
+.button {
+  width: 100%;
+  max-width: 1100px;
+}
+
+/* ---------- Controls row ---------- */
+
 #controls {
-  margin-top: 1rem;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1.25rem;
+  background-color: #111827;
+  border-radius: 12px;
+  border: 1px solid #1f2933;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .control-row {
-  margin: 0.5rem 0;
+  margin: 0.25rem 0;
 }
 
 label {
   margin-right: 0.5rem;
+  font-size: 0.9rem;
+  color: #c9d1d9;
 }
 
+/* Inputs / controls */
 select,
 input[type="range"],
 button {
-  background-color: #1e1e1e;
-  border: 1px solid #3c3c3c;
+  background-color: #0f172a;
+  border: 1px solid #374151;
   color: #e6edf3;
-  padding: 0.35rem 0.5rem;
-  border-radius: 5px;
+  padding: 0.35rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+select:focus,
+input[type="range"]:focus,
+button:focus {
+  outline: none;
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.5);
 }
 
 button {
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.1s ease;
+  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+  font-weight: 500;
 }
 
 button:hover {
-  background-color: #2a2f35;
+  background-color: #1d293b;
   transform: translateY(-1px);
+  box-shadow: 0 8px 14px rgba(15, 23, 42, 0.8);
 }
 
-#map-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 30px;
-  padding: 1rem;
-}
-
-#map {
-  flex-shrink: 0;
-}
-
-svg {
-  border-radius: 12px;
-}
-
-#tooltip {
-  position: absolute;
-  background: rgba(20, 20, 20, 0.95);
-  color: white;
-  padding: 8px 12px;
-  border-radius: 6px;
-  pointer-events: none;
-  opacity: 0;
-  font-size: 0.9rem;
-  border: 1px solid #4ea1ff;
-  transition: opacity 0.2s ease;
-}
-
-#legend {
-  background-color: #202225;
-  border: 1px solid #2f3339;
-  border-radius: 8px;
-  padding: 10px 12px;
-  text-align: left;
-  font-size: 0.85rem;
-  color: #d0d7de;
-  min-width: 200px;
-}
-
-.legend-title {
-  color: #4ea1ff;
-  font-weight: bold;
-  margin-bottom: 6px;
-  /* text-align: center; */
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  margin: 3px 0;
-}
-
-.legend-color {
-  width: 24px;
-  height: 16px;
-  border: 1px solid #2f3339;
-  border-radius: 3px;
-  margin-right: 8px;
-}
-
+/* Month slider row */
 .time-controls {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
+  margin-top: 0.25rem;
 }
 
 #monthLabel {
   min-width: 130px;
   text-align: right;
   font-weight: 500;
-  color: #c9d1d9;
+  color: #e5e7eb;
 }
 
+/* Slider track + thumb */
 #monthSlider {
-  flex: 0 1 300px;
+  flex: 0 1 340px;
   -webkit-appearance: none;
   appearance: none;
   background: transparent;
@@ -131,106 +137,212 @@ svg {
   width: 100%;
 }
 
-/* Track */
 #monthSlider::-webkit-slider-runnable-track {
   background: #30363d;
   height: 6px;
-  border-radius: 3px;
+  border-radius: 999px;
 }
 
 #monthSlider::-moz-range-track {
   background: #30363d;
   height: 6px;
-  border-radius: 3px;
+  border-radius: 999px;
 }
 
 #monthSlider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 14px;
-  height: 14px;
-  background: #58a6ff;
+  width: 16px;
+  height: 16px;
+  background: #60a5fa;
   border-radius: 50%;
   border: none;
-  margin-top: -4px; 
-  margin-left: 0; 
+  margin-top: -5px;
   cursor: pointer;
-  position: relative;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.45);
 }
 
 #monthSlider::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
-  background: #58a6ff;
+  width: 16px;
+  height: 16px;
+  background: #60a5fa;
   border-radius: 50%;
   border: none;
   cursor: pointer;
 }
+
+/* ---------- Map + legend card ---------- */
+
+#map-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 28px;
+  padding: 1.3rem 1.5rem;
+  margin-top: 1.25rem;
+  background-color: #0b1220;
+  border-radius: 16px;
+  border: 1px solid #1f2937;
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.6);
+}
+
+#map {
+  flex-shrink: 0;
+}
+
+/* All SVGs (map + chart) */
+svg {
+  border-radius: 14px;
+}
+
+/* Subtle panel for map background */
+#map svg {
+  background: radial-gradient(circle at top, #020617 0, #020617 55%, #000000 100%);
+}
+
+/* Tooltip above map */
+#tooltip {
+  position: absolute;
+  background: rgba(15, 23, 42, 0.97);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  pointer-events: none;
+  opacity: 0;
+  font-size: 0.85rem;
+  border: 1px solid #3b82f6;
+  transition: opacity 0.2s ease;
+}
+
+/* Legend card */
+#legend {
+  background-color: #020617;
+  border: 1px solid #1f2937;
+  border-radius: 10px;
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 0.83rem;
+  color: #e5e7eb;
+  min-width: 210px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.65);
+}
+
+.legend-title {
+  color: #60a5fa;
+  font-weight: 600;
+  margin-bottom: 8px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin: 4px 0;
+}
+
+.legend-color {
+  width: 26px;
+  height: 16px;
+  border: 1px solid #1f2937;
+  border-radius: 4px;
+  margin-right: 8px;
+}
+
+/* ---------- Chart card ---------- */
 
 #chart-container {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  background-color: #202225;
-  border-top: 1px solid #2f3339;
-  margin-top: 1rem;
-  padding: 1rem;
-  border-radius: 10px;
+  background-color: #020617;
+  border-top: none;
+  margin-top: 1.5rem;
+  padding: 1.3rem 1.5rem 1.6rem;
+  border-radius: 16px;
   gap: 40px;
-  width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.6);
+  border: 1px solid #1f2937;
+}
+
+#chart-left {
+  flex: 1 1 auto;
 }
 
 #chart-title {
-  color: #4ea1ff;
-  margin-bottom: 0.5rem;
+  color: #60a5fa;
+  margin-bottom: 0.6rem;
+  font-size: 1.05rem;
+  text-align: left;
 }
 
+/* Chart info panel */
 #chart-info {
   text-align: left;
-  min-width: 250px;
-  background-color: #181a1d;
-  border: 1px solid #2f3339;
-  border-radius: 8px;
-  padding: 10px;
+  min-width: 260px;
+  background-color: #020617;
+  border: 1px solid #1f2937;
+  border-radius: 10px;
+  padding: 12px 14px;
   font-size: 0.9rem;
-  color: #d0d7de;
+  color: #d1d5db;
+  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.55);
 }
 
 #chart-info h4 {
-  color: #4ea1ff;
+  color: #60a5fa;
   margin-top: 0;
   margin-bottom: 8px;
 }
 
+/* Line chart axes styling */
+#chart .tick text {
+  fill: #cbd5f5;
+  font-size: 0.75rem;
+}
+
+#chart .domain,
+#chart .tick line {
+  stroke: #374151;
+}
+
+/* Hover tooltip for chart */
 .chart-tooltip {
-  background: rgba(15, 15, 15, 0.95);
+  background: rgba(15, 23, 42, 0.97);
   color: #fff;
-  border: 1px solid #4ea1ff;
+  border: 1px solid #3b82f6;
   padding: 6px 8px;
   border-radius: 6px;
-  font-size: 0.85rem;
+  font-size: 0.83rem;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.2s ease;
 }
 
-#description {
-  font-family: Georgia; 
-  font-style: italic; 
-  font-size:16px;
-  margin-bottom: 1rem;
+/* ---------- Button to write-up ---------- */
+
+.button {
+  display: inline-block;
+  background: linear-gradient(135deg, #2563eb, #38bdf8);
+  color: white;
+  padding: 0.7rem 1.4rem;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: transform 0.12s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  margin: 1.8rem auto 2.2rem;
+  text-align: center;
+  font-weight: 500;
 }
 
-hr {
-    height: 2px;
-    color: #85beff;
-    background: #85beff;
-    font-size: 0;
-    border: 0;
-    margin-bottom: 2rem;
+.button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.55);
+  opacity: 0.95;
 }
+
+/* ---------- Writeup page (unchanged semantics) ---------- */
 
 body.writeup {
   max-width: 900px;
@@ -238,10 +350,13 @@ body.writeup {
   padding: 2rem;
   line-height: 1.7;
   text-align: left;
+  background: #05070b;
+  color: #e5e7eb;
 }
 
-body.writeup h1, body.writeup h2 {
-  color: #4ea1ff;
+body.writeup h1,
+body.writeup h2 {
+  color: #60a5fa;
   margin-bottom: 0.5rem;
 }
 
@@ -258,28 +373,49 @@ body.writeup nav a:hover {
   color: #4ea1ff;
 }
 
-.button {
-  display: inline-block;
-  background-color: #4ea1ff;
-  color: white;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: background-color 0.2s;
-  margin-bottom: 1.2rem;
-}
-
-.button:hover {
-  background-color: #4ea1ff;
-}
-
 .page-title {
   text-align: center;
-  color: #4ea1ff; 
+  color: #4ea1ff;
   margin-top: 1rem;
   margin-bottom: 2rem;
   font-size: 2.5rem;
   font-weight: 700;
 }
 
+/* ---------- Responsive tweaks ---------- */
+
+@media (max-width: 960px) {
+  #map-container,
+  #chart-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #map-container {
+    gap: 18px;
+  }
+
+  #chart-container {
+    gap: 24px;
+  }
+
+  #controls {
+    padding-inline: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  #monthLabel {
+    min-width: 100px;
+    font-size: 0.85rem;
+  }
+
+  #controls {
+    padding-inline: 0.9rem;
+  }
+}
 
